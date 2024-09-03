@@ -1,6 +1,6 @@
 from flask import Flask
 from database import db
-from models.customer import Customer
+from models.customer import Customers
 from models.product import Products
 from models.order import Orders
 from models.schemas import ma

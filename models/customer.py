@@ -1,9 +1,10 @@
 from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import List
-from models.order import Orders
 
-class Customer(Base):
+
+class Customers(Base):
+    
     __tablename__ = 'customers'
 
     id: Mapped[int] = mapped_column(primary_key=True) #primary keys auto increment
@@ -14,4 +15,4 @@ class Customer(Base):
     password: Mapped[str] = mapped_column(db.String(255), nullable=False)
 
     # Create a one-many relationship to Orders table
-    orders: Mapped[List["Orders"]] = db.relationship(back_populates='customer')
+    orders: Mapped[List["Orders"]] = db.relationship(back_populates='customers')
