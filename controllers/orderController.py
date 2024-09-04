@@ -12,8 +12,8 @@ def save(): #name the controller the same as the service it recruits
     except ValidationError as e:
         return jsonify(e.messages), 400 #return error message with a 400 failed response
     
-    order = orderService.save(order_data)
-    return order_schema.jsonify(order), 201 # send the customer object with a success code
+    new_order = orderService.save(order_data)
+    return order_schema.jsonify(new_order), 201 # send the customer object with a success code
 
 
 def find_all():

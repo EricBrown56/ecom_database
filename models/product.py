@@ -10,5 +10,5 @@ class Products(Base):
     product_name: Mapped[str] = mapped_column(db.String(255), nullable=False)
     price: Mapped[float] = mapped_column(db.Float(255), nullable=False)
 
-    orders: Mapped[List['Order']] = db.relationship(secondary=order_products)
+    orders: Mapped[List['Orders']] = db.relationship(secondary=order_products)
     
