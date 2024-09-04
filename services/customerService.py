@@ -15,7 +15,8 @@ def save(customer_data):
 
     return new_customer
 
-def find_all():
+def find_all(page=1, per_page=10):
     query = select(Customers)
-    all_customers = db.session.execute(query).scalars().all()
+    all_customers = db.paginate(query, page=int(page), per_page=int(per_page))
+    
     return all_customers

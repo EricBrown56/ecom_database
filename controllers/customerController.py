@@ -17,6 +17,8 @@ def save(): #name the controller the same as the service it recruits
 
 @cache.cached(timeout=60)
 def find_all():
-    all_customers = customerService.find_all()
+    page = request.args.get('page')
+    per_page = request.args.get('per_page')
+    all_customers = customerService.find_all(page, per_page)
 
     return customers_schema.jsonify(all_customers), 200
