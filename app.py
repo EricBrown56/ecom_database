@@ -9,6 +9,7 @@ from routes.productBP import product_blueprint
 from routes.orderBP import order_blueprint
 from limiter import limiter
 from cache import cache
+from models.orderProduct import order_products
 
 
 def create_app(config_name):
