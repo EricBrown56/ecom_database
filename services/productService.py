@@ -16,3 +16,8 @@ def find_all():
     query = select(Products)
     all_products = db.session.execute(query).scalars().all()
     return all_products
+
+def search_product(search_term):
+    query = select(Products).where(Products.product_name.like(f'%{search_term}%'))
+    search_products = db.session.execute(query).scalars().all()
+    return search_products

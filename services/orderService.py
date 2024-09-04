@@ -22,3 +22,5 @@ def find_all():
     query = select(Orders)
     all_orders = db.session.execute(query).scalars().all()
     return all_orders
+
+

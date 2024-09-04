@@ -20,3 +20,8 @@ def find_all():
     all_products = productService.find_all()
 
     return products_schema.jsonify(all_products), 200
+
+def search_product():
+    search_term = request.args.get('search')
+    search_products = productService.search_product(search_term)
+    return products_schema.jsonify(search_products), 200
