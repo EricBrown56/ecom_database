@@ -17,7 +17,9 @@ def save(): #name the controller the same as the service it recruits
 
 
 def find_all():
-    all_products = productService.find_all()
+    page = request.args.get('page')
+    per_page = request.args.get('per_page')
+    all_products = productService.find_all(page, per_page)
 
     return products_schema.jsonify(all_products), 200
 

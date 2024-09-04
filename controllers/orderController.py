@@ -17,6 +17,8 @@ def save(): #name the controller the same as the service it recruits
 
 
 def find_all():
-    all_orders = orderService.find_all()
+    page = request.args.get('page')
+    per_page = request.args.get('per_page')
+    all_orders = orderService.find_all(page, per_page)
 
     return orders_schema.jsonify(all_orders), 200
