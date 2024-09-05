@@ -9,11 +9,13 @@ class CustomerSchema(ma.Schema): #inheriting our instance of Marshmallow
     phone = fields.String(required=True)
     username = fields.String(required=True)
     password = fields.String(required=True)
+    admin = fields.Integer(required=True)
 
     class Meta:
-        fields = ('id', 'name', 'email', 'phone', 'username', 'password')# allfields that could be coming in when validating data
+        fields = ('id', 'name', 'email', 'phone', 'username', 'password', 'admin')# allfields that could be coming in when validating data
 
 
 customer_schema = CustomerSchema() #instantiate a single customer schema
 customers_schema = CustomerSchema(many=True, exclude=['password'])
+customer_login = CustomerSchema(exclude=['name', 'phone', 'username', 'id', 'admin'])
      

@@ -13,6 +13,7 @@ class Customers(Base):
     phone: Mapped[str] = mapped_column(db.String(25), nullable=False)
     username: Mapped[str] = mapped_column(db.String(30), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(db.String(255), nullable=False)
+    admin: Mapped[int] = mapped_column(db.Integer, nullable=False)
 
     # Create a one-many relationship to Orders table
     orders: Mapped[List["Orders"]] = db.relationship(back_populates='customers')
