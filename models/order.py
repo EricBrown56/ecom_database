@@ -19,4 +19,4 @@ class Orders(Base):
     # create our many-one relationship to the customer table
     customers: Mapped['Customers'] = db.relationship(back_populates='orders')
     # create a many-many relationship to Products through our association table order_products
-    products: Mapped[List['Products']] = db.relationship(secondary=order_products)
+    products: Mapped[List['Products']] = db.relationship(secondary=order_products) #will look just like customer_products(cart)

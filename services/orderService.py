@@ -8,10 +8,11 @@ from models.customer import Customers
 def save(order_data):
     new_order = Orders( customer_id=order_data['customer_id'], order_date=date.today())
 
-    for item_id in order_data['items']:
+    for item_id in order_data['items']: #for item in customer.cart
         query = select(Products).where(Products.id==item_id)
         item = db.session.execute(query).scalar()
         new_order.products.append(item)
+        #customer.cart.remove(item)
     
     db.session.add(new_order)
     db.session.commit() 
