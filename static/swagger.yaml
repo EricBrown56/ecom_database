@@ -64,6 +64,52 @@ paths:
               phone: "1234567890"
               username: "jsmith"
               admin: 0
+
+#GetAllProducts Path
+  /products:
+    get:
+      tags:
+        - Product
+      summary: "Retrieve a list of product objects"
+      description: "Endpont to retrieve all products, requires token authentication"
+      responses:
+        200:
+          description: "Successfully retrieved all products"
+          schema:
+            $ref: "#/definitions/GetProductsResponse"
+          examples:
+            application/json:
+              name: "Product 1"
+              price: 100
+              description: "Product 1 description"
+              category: "Category 1"
+              image: "image1.jpg"
+              quantity: 10
+
+#GetAllOrders Path
+  /orders:
+    get:
+      tags:
+        - Order
+      summary: "Retrieve a list of order objects"
+      description: "Endpont to retrieve all orders, requires token authentication"
+      security:
+        - bearerAuth:
+      responses:
+        200:
+          description: "Successfully retrieved all orders"
+          schema:
+            $ref: "#/definitions/GetOrdersResponse"
+          examples:
+            application/json:
+              order_id: 1
+              customer_id: 1
+              product_id: 1
+              quantity: 1
+              total: 100
+              status: "pending"
+
+
 #Payloads and Responses
 definitions: 
 #Login Definitions
@@ -119,3 +165,51 @@ definitions:
       admin:
         type: "integer"
         description: "Admin permission"
+
+#Get all products Definitions
+
+  GetProductsResponse:
+    type: "object"
+    properties:
+      name: 
+        type: "string"
+        desciption: "Product name"
+      price:
+        type: "integer"
+        desciption: "Product price"
+      description:
+        type: "string"
+        desciption: "Product description"
+      category:
+        type: "string"
+        desciption: "Product category"
+      image:
+        type: "string"
+        desciption: "Product image"
+      quantity:
+        type: "integer"
+        desciption: "Product quantity"
+
+#Get all orders Definitions
+
+  GetOrdersResponse:
+    type: "object"
+    properties:
+      order_id:
+        type: "integer"
+        description: "Order ID"
+      customer_id:
+        type: "integer"
+        description: "Customer ID"
+      product_id:
+        type: "integer"
+        description: "Product ID"
+      quantity:
+        type: "integer"
+        description: "Quantity of product"
+      total:
+        type: "integer"
+        description: "Total price of order"
+      status:
+        type: "string"
+        description: "Status of order"

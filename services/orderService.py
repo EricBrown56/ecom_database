@@ -5,20 +5,35 @@ from models.product import Products
 from datetime import date
 from models.customer import Customers
 
-def save(order_data):
-    new_order = Orders( customer_id=order_data['customer_id'], order_date=date.today())
 
-    for item_id in order_data['items']: #for item in customer.cart
+
+ #
+    #customer.cart.remove(<product object>)
+
+    #will need db.session.add and db.session.commit after adding and removing items
+
+    #view would be return cart
+
+    #place order will utilize the customers cart do a for loop for item in customer.cart, order.append item and customer.cart.remove item
+    #you will add both the customer and the order and commit them both
+
+def save(order_data):
+    #new_order = Orders( customer_id=order_data['customer_id'], order_date=date.today())
+    customer = db.session.query(Customers).filter(Customers.id==order_data['customer_id']).first()
+    cart = Orders(customer_id=customer.id, order_date=date.today())
+
+
+    for item_id in customer.cart: #for item in customer.cart
         query = select(Products).where(Products.id==item_id)
         item = db.session.execute(query).scalar()
-        new_order.products.append(item)
+        customer.cart.append(item) #order.append(item)
         #customer.cart.remove(item)
     
-    db.session.add(new_order)
+    db.session.add(cart)
     db.session.commit() 
-    db.session.refresh(new_order)# makes sure the data doesnt decouple
+    db.session.refresh(cart)# makes sure the data doesnt decouple
 
-    return new_order
+    return cart
 
 def find_all(page=1, per_page=10):
     query = select(Orders)
