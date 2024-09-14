@@ -25,7 +25,7 @@ def token_required(f): #f = the function our wrapper wraps around
                 payload = jwt.decode(token, SECRET_KEY, algorithms='HS256')# decoding the token with the same way we encoded it
                 print("Payload", payload)
             except jwt.ExpiredSignatureError:
-                return jsonify({"message": "Tokehas expired"}), 401
+                return jsonify({"message": "Token is expired"}), 401
             except jwt.InvalidTokenError:
                 return jsonify({"message": "Invalid Token"}), 401
             return f(*args, **kwargs) #Calling our wrapped function
@@ -42,7 +42,7 @@ def user_validation(f): #validates and returns the user_id associated with the t
                 token = request.headers["Authorization"].split()[1]
                 payload = jwt.decode(token, SECRET_KEY, algorithms='HS256')
             except jwt.ExpiredSignatureError:
-                return jsonify({"message": "Tokehas expired"}), 401
+                return jsonify({"message": "Token is expired"}), 401
             except jwt.InvalidTokenError:
                 return jsonify({"message": "Invalid Token"}), 401    
             return f(token_id=payload['sub'], *args, **kwargs)

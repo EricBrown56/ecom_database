@@ -40,9 +40,9 @@ def login(credentials):
 
 def add_item_to_cart(item_data):
     #query customer and item and db.session.add and commit
-    query = select(Customers).where(Customers.id==customer.id)
+    query = select(Customers).where(Customers.id==item_data['customer_id'])
     customer = db.session.execute(query).scalar()
-    query2 = select(Products).where(Products.id==item_data.id)
+    query2 = select(Products).where(Products.id==item_data['product_id'])
     item = db.session.execute(query2).scalar()
     customer.cart.append(item)
     
@@ -54,10 +54,10 @@ def add_item_to_cart(item_data):
 
 
 
-def remove_item_from_cart(item):
-    query = select(Customers).where(Customers.id==customer.id)
+def remove_item_from_cart(item_data):
+    query = select(Customers).where(Customers.id==item_data['customer_id'])
     customer = db.session.execute(query).scalar()
-    query2 = select(Products).where(Products.product_name==item)
+    query2 = select(Products).where(Products.id==item_data['product_id'])
     item = db.session.execute(query2).scalar()
     customer.cart.remove(item)
     
@@ -68,30 +68,32 @@ def remove_item_from_cart(item):
     return customer
 
 
-def view_cart():
-    query = select(Customers).where(Customers.id==customer.id)
+def view_cart(item_data):
+    query = select(Customers).where(Customers.id==item_data['customer_id'])
     customer = db.session.execute(query).scalar()
-    cart = customer.cart
-    
+    all_cart_items = customer.cart
+    cart = []
+    for item in all_cart_items:
+        print(item.product_name)
+        cart.append(item.product_name)
     return cart
 
 
-
-def empty_cart():
-    query = select(Customers).where(Customers.id==customer.id)
+def empty_cart(item_data):
+    query = select(Customers).where(Customers.id==item_data['customer_id'])
     customer = db.session.execute(query).scalar()
     customer.cart = []
     
     db.session.add(customer)
     db.session.commit()
     db.session.refresh(customer)
+    
+    return customer.cart
 
-    return customer
 
 
-
-def place_order():
-    query = select(Customers).where(Customers.id==customer.id)
+def place_order(item_data):
+    query = select(Customers).where(Customers.id==item_data['customer_id'])
     customer = db.session.execute(query).scalar()
     new_order = Orders(customer_id=customer.id, order_date=date.today())
     for item in customer.cart:

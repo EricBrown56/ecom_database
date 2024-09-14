@@ -1,7 +1,6 @@
 from flask import Blueprint
 from controllers.customerController import save, find_all, login, add_item_to_cart, remove_item_from_cart, view_cart, empty_cart, place_order
 
-
 customer_blueprint = Blueprint('customer_bp', __name__)
 
 #url_prefix for this blueprint is /customers

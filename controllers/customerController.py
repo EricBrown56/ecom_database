@@ -48,12 +48,47 @@ def login():
         return jsonify({"status": "error", "message": "invalid username or password"}), 404
     
 @token_required   
-def add_item_to_cart(item_data):
+def add_item_to_cart():
     try:
-        item_data = 
+        item_data = request.json
     except ValidationError as e:
         return jsonify(e.messages), 400 #invalid credential payload
-    
     customer = customerService.add_item_to_cart(item_data)
     return customer_schema.jsonify(customer), 200
 
+def remove_item_from_cart():
+    try:
+        item_data = request.json
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+    customer = customerService.remove_item_from_cart(item_data)
+    return customer_schema.jsonify(customer), 200
+
+@token_required
+def view_cart():
+    try:
+        item_data = request.json
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+    cart = customerService.view_cart(item_data)
+    print(cart)
+    return cart, 200
+    
+@token_required
+def empty_cart():
+    try:
+        item_data = request.json
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+    cart = customerService.empty_cart(item_data)
+   
+    return jsonify({"status": "success", "message": "cart emptied"}), 200
+
+@token_required
+def place_order():
+    try:
+        item_data = request.json
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+    order = customerService.place_order(item_data)
+    return jsonify({"status": "success", "message": "order placed"}), 200
