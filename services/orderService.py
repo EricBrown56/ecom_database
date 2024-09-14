@@ -17,23 +17,23 @@ from models.customer import Customers
     #place order will utilize the customers cart do a for loop for item in customer.cart, order.append item and customer.cart.remove item
     #you will add both the customer and the order and commit them both
 
-def save(order_data):
-    #new_order = Orders( customer_id=order_data['customer_id'], order_date=date.today())
-    customer = db.session.query(Customers).filter(Customers.id==order_data['customer_id']).first()
-    cart = Orders(customer_id=customer.id, order_date=date.today())
+# def save(order_data):
+#     new_order = Orders( customer_id=order_data['customer_id'], order_date=date.today())
+#     customer = db.session.query(Customers).filter(Customers.id==order_data['customer_id']).first()
+#     #cart = Orders(customer_id=customer.id, order_date=date.today())
 
 
-    for item_id in customer.cart: #for item in customer.cart
-        query = select(Products).where(Products.id==item_id)
-        item = db.session.execute(query).scalar()
-        customer.cart.append(item) #order.append(item)
-        #customer.cart.remove(item)
+#     for item in customer.cart: #for item in customer.cart
+#         query = select(Products).where(Products.name==item)
+#         item = db.session.execute(query).scalar()
+#         new_order.products.append(item) 
+#         customer.cart.remove(item)
     
-    db.session.add(cart)
-    db.session.commit() 
-    db.session.refresh(cart)# makes sure the data doesnt decouple
+#     db.session.add(new_order)
+#     db.session.commit() 
+#     db.session.refresh(new_order)# makes sure the data doesnt decouple
 
-    return cart
+#     return new_order
 
 def find_all(page=1, per_page=10):
     query = select(Orders)
@@ -59,4 +59,7 @@ def find_by_email(email):
     orders = db.session.execute(query).scalars().all()
 
     return orders
+
+
+
 

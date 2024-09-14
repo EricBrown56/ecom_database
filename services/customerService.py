@@ -2,6 +2,11 @@ from database import db #services interact directly with the db
 from models.customer import Customers #need this to create customer objects
 from sqlalchemy import select #so we can query our db
 from utils.util import encode_role_token
+from models.order import Orders
+from sqlalchemy import select #so we can query our db
+from models.product import Products
+from datetime import date
+
 
 
 def save(customer_data):
@@ -32,3 +37,74 @@ def login(credentials):
         return auth_token
     
     return None
+
+def add_item_to_cart(item_data):
+    #query customer and item and db.session.add and commit
+    query = select(Customers).where(Customers.id==customer.id)
+    customer = db.session.execute(query).scalar()
+    query2 = select(Products).where(Products.id==item_data.id)
+    item = db.session.execute(query2).scalar()
+    customer.cart.append(item)
+    
+    db.session.add(customer)
+    db.session.commit()
+    db.session.refresh(customer)
+
+    return customer
+
+
+
+def remove_item_from_cart(item):
+    query = select(Customers).where(Customers.id==customer.id)
+    customer = db.session.execute(query).scalar()
+    query = select(Products).where(Products.product_name==item)
+    customer.cart.remove(item)
+    
+    db.session.add(customer)
+    db.session.commit()
+    db.session.refresh(customer)
+
+    return customer
+
+
+def view_cart():
+    query = select(Customers).where(Customers.id==customer.id)
+    customer = db.session.execute(query).scalar()
+    cart = customer.cart
+    
+    return cart
+
+
+
+def empty_cart():
+    query = select(Customers).where(Customers.id==customer.id)
+    customer = db.session.execute(query).scalar()
+    customer.cart = []
+    
+    db.session.add(customer)
+    db.session.commit()
+    db.session.refresh(customer)
+
+    return customer
+
+
+
+def place_order():
+    query = select(Customers).where(Customers.id==customer.id)
+    customer = db.session.execute(query).scalar()
+    new_order = Orders(customer_id=customer.id, order_date=date.today())
+    for item in customer.cart:
+        query = select(Products).where(Products.product_name==item)
+        item = db.session.execute(query).scalar()
+        new_order.products.append(item)
+        customer.cart.remove(item)
+
+    db.session.add(new_order)
+    db.session.commit()
+    db.session.refresh(new_order)
+
+    db.session.add(customer)
+    db.session.commit()
+    db.session.refresh(customer)
+
+    return new_order

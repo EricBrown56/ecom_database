@@ -3,7 +3,7 @@ from models.schemas.customerSchema import customer_schema, customers_schema, cus
 from services import customerService
 from marshmallow import ValidationError
 from cache import cache
-from utils.util import token_required
+from utils.util import token_required, user_validation, admin_required
 
 
 def save(): #name the controller the same as the service it recruits
@@ -44,3 +44,55 @@ def login():
         return jsonify(response), 200
     else:
         return jsonify({"status": "error", "message": "invalid username or password"}), 404
+    
+    
+def add_item_to_cart():
+    try:
+        item_data = customer_login.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400 #invalid credential payload
+
+    customer = customerService.add_item_to_cart(item_data)
+    return customer_schema.jsonify(customer), 200
+
+def remove_item_from_cart():
+    try:
+        item_data = customer_login.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400 #invalid credential payload
+
+    customer = customerService.remove_item_from_cart(item_data)
+    return customer_schema.jsonify(customer), 200
+
+def view_cart():
+    try:
+        item_data = customer_login.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400 #invalid credential payload
+
+    customer = customerService.view_cart(item_data)
+    return customer_schema.jsonify(customer), 200
+
+
+def empty_cart():
+    try:
+        item_data = customer_login.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400 #invalid credential payload
+
+    customer = customerService.empty_cart(item_data)
+    return customer_schema.jsonify(customer), 200
+
+
+def place_order():
+    try:
+        item_data = customer_login.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400 #invalid credential payload
+
+    customer = customerService.place_order(item_data)
+    return customer_schema.jsonify(customer), 200
+
+
+
+
