@@ -57,7 +57,8 @@ def add_item_to_cart(item_data):
 def remove_item_from_cart(item):
     query = select(Customers).where(Customers.id==customer.id)
     customer = db.session.execute(query).scalar()
-    query = select(Products).where(Products.product_name==item)
+    query2 = select(Products).where(Products.product_name==item)
+    item = db.session.execute(query2).scalar()
     customer.cart.remove(item)
     
     db.session.add(customer)
