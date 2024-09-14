@@ -95,19 +95,18 @@ def empty_cart(item_data):
 def place_order(item_data):
     query = select(Customers).where(Customers.id==item_data['customer_id'])
     customer = db.session.execute(query).scalar()
-    new_order = Orders(customer_id=customer.id, order_date=date.today())
+    order = Orders(customer_id=customer.id, order_date=date.today())
     for item in customer.cart:
-        query = select(Products).where(Products.product_name==item)
-        item = db.session.execute(query).scalar()
-        new_order.products.append(item)
-        customer.cart.remove(item)
+        order.products.append(item)
 
-    db.session.add(new_order)
+    db.session.add(order)
     db.session.commit()
-    db.session.refresh(new_order)
+    db.session.refresh(order)
+
+    customer.cart = []
 
     db.session.add(customer)
     db.session.commit()
     db.session.refresh(customer)
-
-    return new_order
+    
+    return order
