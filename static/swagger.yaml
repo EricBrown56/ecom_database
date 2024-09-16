@@ -42,7 +42,7 @@ paths:
               token: "afgsafgasgasgasg...."
               message: "successfully logged in"
               status: "success"
-
+              
 #GetAllCustomers Path
   /customers:
     get:
@@ -51,7 +51,7 @@ paths:
       summary: "Retrieve a list of customer objects"
       description: "Endpont to retrieve all customers, requires token authentication"
       security:
-        - bearerAuth:
+        - bearerAuth: []
       responses:
         200:
           description: "Successfully retrieved all customers"
@@ -64,6 +64,142 @@ paths:
               phone: "1234567890"
               username: "jsmith"
               admin: 0
+              
+              
+    post:
+      tags:
+        - Customer
+      summary: "Create a customer object"
+      description: "Endpoint to create a customer in the e-commerce system"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Customer object"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateCustomerPayload"
+      responses:
+        200:
+          description: "Customer created successfully"
+          schema:
+            $ref: "#/definitions/CreateCustomerResponse"
+          examples:
+            application/json:
+              name: "Mike Smith"
+              email: "mike@smith.com"
+              phone: "555-444-5544"
+              username: "msmith888"
+              admin: 0
+              
+              
+# adding items to the cart
+  /customers/add-item: #go here to add an item to the cart. You will need to be logged in.
+    post:
+      tags:
+        - Cart
+      summary: "Add a product to the customer's cart"
+      description: "Endpoint to add a product to the customer's cart"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Cart object"
+          required: true
+          schema:
+            $ref: "#/definitions/AddToCartPayload"
+      responses:
+        200:
+          description: "Products added to cart"
+          schema:
+            $ref: "#/definitions/AddToCartResponse"
+          examples:
+            application/json:
+              message: "Products added to cart"
+
+  /customers/remove-item:
+    post:
+      tags:
+        - Cart
+      summary: "Remove a product(s) from the customer's cart"
+      description: "Endpoint to remove product(s) from the customer's cart"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Cart object"
+          required: true
+          schema:
+            $ref: "#/definitions/RemoveItemFromCartPayload"
+      responses:
+        200:
+          description: "Product removed from cart"
+          schema:
+            $ref: "#/definitions/RemoveItemFromCartResponse"
+          examples:
+            application/json:
+              message: "Product removed from cart"
+
+  /customers/view-cart:
+    get:
+      tags:
+        - Cart
+      summary: "View all products in the customer's cart"
+      description: "Endpoint to view all products in the customer's cart"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Cart contents retrieved"
+          schema:
+            $ref: "#/definitions/ViewCartResponse"
+          examples:
+            application/json:
+              customer_id: 2
+              products:
+                - id: 1
+                  price: 299.99
+                  product_name: "Xbox"
+                - id: 2
+                  price: 499
+                  product_name: "PS5"
+
+  /customers/empty-cart:
+    delete:
+      tags:
+        - Cart
+      summary: "Remove all products from the customer's cart"
+      description: "Endpoint to empty the customer's cart"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Cart has been emptied"
+          schema:
+            $ref: "#/definitions/EmptyCartReponse"
+          examples:
+            application/json:
+              message: "Cart has been emptied"
+
+  /customers/place-order:
+    post:
+      tags:
+        - Cart
+      summary: "Place an order with the products in the customer's cart"
+      description: "Endpoint to place an order with the products in the customer's cart"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Order placed successfully"
+          schema:
+            $ref: "#/definitions/PlaceOrderResponse"
+          examples:
+            application/json:
+              message: "Order placed successfully"
+              order_date: "date"
+              order_id: 2
 
 #GetAllProducts Path
   /products:
@@ -81,10 +217,47 @@ paths:
             application/json:
               name: "Product 1"
               price: 100
-              description: "Product 1 description"
-              category: "Category 1"
-              image: "image1.jpg"
-              quantity: 10
+    post:
+      tags:
+        - Product
+      summary: "Create a product object in our e-commerce system"
+      description: "Endpoint to create a product object"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Product object"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateProductPayload"
+      responses:
+        200:
+          description: "Product created successfully"
+          schema:
+            $ref: "#/definitions/CreateProductResponse"
+          examples:
+            application/json:
+              product_name: "Xbox"
+              price: 299.99
+                        
+  /products/search:
+    get:
+      tags:
+        - Product
+      summary: "Retrieve a specific product object"
+      description: "Endpont to retrieve a specific product, requires token authentication"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Successfully product"
+          schema:
+            $ref: "#/definitions/GetProductsResponse"
+          examples:
+            application/json:
+              name: "Product 1"
+              price: 100
 
 #GetAllOrders Path
   /orders:
@@ -94,7 +267,7 @@ paths:
       summary: "Retrieve a list of order objects"
       description: "Endpont to retrieve all orders, requires token authentication"
       security:
-        - bearerAuth:
+        - bearerAuth: []
       responses:
         200:
           description: "Successfully retrieved all orders"
@@ -105,10 +278,63 @@ paths:
               order_id: 1
               customer_id: 1
               product_id: 1
-              quantity: 1
-              total: 100
-              status: "pending"
-
+              
+  /orders/<int:order_id>:
+    get:
+      tags:
+        - Order
+      summary: "Retrieve a specific order by order id"
+      description: "Endpoint to retrieve a specific order, requires token authentication"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Successfully retrieved order"
+          schema:
+            $ref: "#/definitions/GetOrdersResponse"
+          examples:
+            application/json:
+              order_id: 1
+              customer_id: 1
+              product_id: 1
+              
+  /orders/<int:customer_id>:
+    get:
+      tags:
+        - Order
+      summary: "Retrieve a specific order by customer id"
+      description: "Endpoint to retrieve a specific order, requires token authentication"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Successfully retrieved order"
+          schema:
+            $ref: "#/definitions/GetOrdersResponse"
+          examples:
+            application/json:
+              order_id: 1
+              customer_id: 1
+              product_id: 1
+              
+  /orders/customer-email:
+    get:
+      tags:
+        - Order
+      summary: "Retrieve a specific order by customer email address"
+      description: "Endpoint to retrieve a specific order, requires token authentication"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Successfully retrieved order"
+          schema:
+            $ref: "#/definitions/GetOrdersResponse"
+          examples:
+            application/json:
+              order_id: 1
+              customer_id: 1
+              product_id: 1
 
 #Payloads and Responses
 definitions: 
@@ -136,7 +362,7 @@ definitions:
         type: "string"
         description: "Message indicating success or failure"
       status:
-        type: "status"
+        type: "string"
         description: "Status of operation"
     required:
       - "message"
@@ -149,67 +375,228 @@ definitions:
     properties:
       name: 
         type: "string"
-        desciption: "Customer name"
+        example: "Franklin Stanklin"
       phone:
         type: "string"
-        desciption: "Customer phone"
+        example: "444-555-4343"
       email:
         type: "string"
-        desciption: "Customer email"
+        example: "frank@stank.com"
       password:
         type: "string"
-        desciption: "Customer password"
+        example: "Stanky1"
       username:
         type: "string"
-        desciption: "Customer username"
+        example: "Frank2"
       admin:
         type: "integer"
         description: "Admin permission"
+        example: 0
+        
+  CreateCustomerPayload:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Franklin Stanklin"
+      phone:
+        type: "string"
+        example: "111-111-1111"
+      email:
+        type: "string"
+        example: "frank@stank.com"
+      password:
+        type: "string"
+        example: "Stanky1"
+      username:
+        type: "string"
+        example: "Frank2"
+      admin:
+        type: "integer"
+        example: 0
+    required:
+      - name
+      - phone
+      - email
+      - password
+      - username
+      - admin
 
-#Get all products Definitions
+  CreateCustomerResponse:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Franklin Stanklin"
+      phone:
+        type: "string"
+        example: "111-111-1111"
+      email:
+        type: "string"
+        example: "frank@stank.com"
+      password:
+        type: "string"
+        example: "Stanky1"
+      username:
+        type: "string"
+        example: "Frank2"
+      admin:
+        type: "integer"
+        example: 0
+
 
   GetProductsResponse:
     type: "object"
     properties:
       name: 
         type: "string"
-        desciption: "Product name"
-      price:
+        example: "PS5"
+      price: 
         type: "integer"
-        desciption: "Product price"
-      description:
-        type: "string"
-        desciption: "Product description"
-      category:
-        type: "string"
-        desciption: "Product category"
-      image:
-        type: "string"
-        desciption: "Product image"
-      quantity:
-        type: "integer"
-        desciption: "Product quantity"
+        example: 450
+        
 
-#Get all orders Definitions
+  CreateProductPayload:
+    type: "object"
+    properties:
+      price:
+        type: "number"
+        format: "float"
+        description: "Price of the product"
+      product_name:
+        type: "string"
+        example: "iPhone 14 Pro"
+    required:
+      - price
+      - product_name
+  
+
+  CreateProductResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: "3"
+      price:
+        type: "number"
+        format: "float"
+        example: "950"
+      product_name:
+        type: "string"
+        example: "iPhone 14 Pro"
 
   GetOrdersResponse:
     type: "object"
     properties:
-      order_id:
+      id:
         type: "integer"
         description: "Order ID"
       customer_id:
         type: "integer"
-        description: "Customer ID"
-      product_id:
+        description: "ID of the customer"
+      order_date:
+        type: "object"
+        description: "Date and time when the order was placed"
+      products:
+        type: "array"
+        description: "List of products in the order"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "Product ID"
+            product_name:
+              type: "string"
+              description: "Name of the product"
+            price:
+              type: "number"
+              description: "Product price"
+
+  AddToCartPayload:
+    type: "object"
+    properties:
+      customer_id:
         type: "integer"
-        description: "Product ID"
-      quantity:
-        type: "integer"
-        description: "Quantity of product"
-      total:
-        type: "integer"
-        description: "Total price of order"
-      status:
+        example: "1"
+      product_ids:
+        type: "object"
+        example: "[1, 2, 3]"
+    required:
+      - customer_id
+      - product_ids
+
+  AddToCartResponse:
+    type: "object"
+    properties:
+      message:
         type: "string"
-        description: "Status of order"
+        description: "products added to cart"
+
+  RemoveItemFromCartPayload:
+    type: "object"
+    properties:
+      customer_id:
+        type: "integer"
+        example: "1"
+      product_ids:
+        type: "object"
+        example: "[1, 2, 3]"
+    required:
+      - customer_id
+      - product_ids
+
+
+  RemoveItemFromCartResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        description: "Product removed from cart"
+
+  ViewCartResponse:
+    type: "object"
+    properties:
+      customer_id:
+        type: "integer"
+        description: "ID of the customer"
+      products:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "Product ID"
+            price:
+              type: "number"
+              format: "float"
+              description: "Product price"
+            product_name:
+              type: "string"
+              description: "Name of the product"
+
+  EmptyCartReponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "cart has been emptied"
+
+  PlaceOrderResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "Order placed succesfully"
+      order_date:
+        type: "object"
+        example: "Tue, 10 Sep 2024 00:00:00 GMT"
+      order_id:
+        type: "integer"
+        example: "13"
+
+      
+
+
+      
