@@ -71,7 +71,6 @@ def view_cart():
     except ValidationError as e:
         return jsonify(e.messages), 400
     cart = customerService.view_cart(item_data)
-    print(cart)
     return cart, 200
     
 @token_required
