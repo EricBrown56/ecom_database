@@ -25,6 +25,8 @@ paths:
         - Customer # creates a category for this route that can be reused on like routes
       summary: "Login endpoint (generates a token)"
       description: "Endpoint for user authentication and token generation."
+      security: 
+        - bearerAuth: []
       parameters:
         - in: "body"
           name: "body"
@@ -39,9 +41,9 @@ paths:
             $ref: '#/definitions/LoginResponse'
           examples:
             application/json:
-              token: "afgsafgasgasgasg...."
-              message: "successfully logged in"
-              status: "success"
+              message: "message": "successfully logging in",
+              status: "status": "success",
+              token: "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               
 #GetAllCustomers Path
   /customers:
@@ -85,11 +87,28 @@ paths:
             $ref: "#/definitions/CreateCustomerResponse"
           examples:
             application/json:
-              name: "Mike Smith"
-              email: "mike@smith.com"
-              phone: "555-444-5544"
-              username: "msmith888"
-              admin: 0
+              {
+        "customer_id": 5,
+        "id": 4,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 1,
+                "price": 399.99,
+                "product_name": "PS5"
+            },
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 4,
+                "price": 2499.99,
+                "product_name": "Google Goggles"
+            }
+        ]
+    }
               
               
 # adding items to the cart
