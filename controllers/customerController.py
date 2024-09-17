@@ -54,7 +54,7 @@ def add_item_to_cart():
     except ValidationError as e:
         return jsonify(e.messages), 400 #invalid credential payload
     customer = customerService.add_item_to_cart(item_data)
-    return customer_schema.jsonify(customer), 200
+    return jsonify({"status": "success", "message": "item added to cart"}), 200
 
 def remove_item_from_cart():
     try:
@@ -62,7 +62,7 @@ def remove_item_from_cart():
     except ValidationError as e:
         return jsonify(e.messages), 400
     customer = customerService.remove_item_from_cart(item_data)
-    return customer_schema.jsonify(customer), 200
+    return jsonify({"status": "success", "message": "item removed from cart"}), 200
 
 @token_required
 def view_cart():
@@ -90,4 +90,4 @@ def place_order():
     except ValidationError as e:
         return jsonify(e.messages), 400
     order = customerService.place_order(item_data)
-    return jsonify({"status": "success", "message": "order placed"}), 200
+    return jsonify({"status": "success", "message": "order placed successfully"}), 200

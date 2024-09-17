@@ -129,12 +129,13 @@ paths:
             $ref: "#/definitions/AddToCartPayload"
       responses:
         200:
-          description: "Products added to cart"
+          description: "Adding item to cart"
           schema:
             $ref: "#/definitions/AddToCartResponse"
           examples:
             application/json:
-              message: "Products added to cart"
+              message: "item added to cart"
+              status: "success"
 
   /customers/remove-item:
     post:
@@ -153,12 +154,13 @@ paths:
             $ref: "#/definitions/RemoveItemFromCartPayload"
       responses:
         200:
-          description: "Product removed from cart"
+          description: "Removing item from cart"
           schema:
             $ref: "#/definitions/RemoveItemFromCartResponse"
           examples:
             application/json:
-              message: "Product removed from cart"
+              message: "item removed from cart"
+              status: "success"
 
   /customers/view-cart:
     get:
@@ -175,14 +177,10 @@ paths:
             $ref: "#/definitions/ViewCartResponse"
           examples:
             application/json:
-              customer_id: 2
-              products:
-                - id: 1
-                  price: 299.99
-                  product_name: "Xbox"
-                - id: 2
-                  price: 499
-                  product_name: "PS5"
+              [
+                  "Laptop",
+                  "Desktop Computer"
+              ]
 
   /customers/empty-cart:
     delete:
@@ -199,7 +197,8 @@ paths:
             $ref: "#/definitions/EmptyCartReponse"
           examples:
             application/json:
-              message: "Cart has been emptied"
+              message: "Cart emptied"
+              status: "success"
 
   /customers/place-order:
     post:
@@ -217,8 +216,7 @@ paths:
           examples:
             application/json:
               message: "Order placed successfully"
-              order_date: "date"
-              order_id: 2
+              status: "success"
 
 #GetAllProducts Path
   /products:
@@ -234,8 +232,58 @@ paths:
             $ref: "#/definitions/GetProductsResponse"
           examples:
             application/json:
-              name: "Product 1"
-              price: 100
+              [
+    {
+        "id": 1,
+        "price": 399.99,
+        "product_name": "PS5"
+    },
+    {
+        "id": 2,
+        "price": 299.99,
+        "product_name": "Xbox"
+    },
+    {
+        "id": 3,
+        "price": 1299.99,
+        "product_name": "Apple Watch"
+    },
+    {
+        "id": 4,
+        "price": 2499.99,
+        "product_name": "Google Goggles"
+    },
+    {
+        "id": 5,
+        "price": 1199.99,
+        "product_name": "iPhone 15"
+    },
+    {
+        "id": 6,
+        "price": 1399.99,
+        "product_name": "Laptop"
+    },
+    {
+        "id": 7,
+        "price": 699.99,
+        "product_name": "Samsung TV"
+    },
+    {
+        "id": 8,
+        "price": 1599.98,
+        "product_name": "Desktop Computer"
+    },
+    {
+        "id": 9,
+        "price": 299.99,
+        "product_name": "Remote controlled car"
+    },
+    {
+        "id": 10,
+        "price": 29.99,
+        "product_name": "DVD Player"
+    }
+]
     post:
       tags:
         - Product
@@ -257,27 +305,9 @@ paths:
             $ref: "#/definitions/CreateProductResponse"
           examples:
             application/json:
-              product_name: "Xbox"
-              price: 299.99
+              message: "product added"
+              status: "success"
                         
-  /products/search:
-    get:
-      tags:
-        - Product
-      summary: "Retrieve a specific product object"
-      description: "Endpont to retrieve a specific product, requires token authentication"
-      security:
-        - bearerAuth: []
-      responses:
-        200:
-          description: "Successfully product"
-          schema:
-            $ref: "#/definitions/GetProductsResponse"
-          examples:
-            application/json:
-              name: "Product 1"
-              price: 100
-
 #GetAllOrders Path
   /orders:
     get:
@@ -294,9 +324,189 @@ paths:
             $ref: "#/definitions/GetOrdersResponse"
           examples:
             application/json:
-              order_id: 1
-              customer_id: 1
-              product_id: 1
+              [
+    {
+        "customer_id": 1,
+        "id": 1,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 1,
+                "price": 399.99,
+                "product_name": "PS5"
+            },
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            }
+        ]
+    },
+    {
+        "customer_id": 3,
+        "id": 3,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            }
+        ]
+    },
+    {
+        "customer_id": 5,
+        "id": 4,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 1,
+                "price": 399.99,
+                "product_name": "PS5"
+            },
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 4,
+                "price": 2499.99,
+                "product_name": "Google Goggles"
+            }
+        ]
+    },
+    {
+        "customer_id": 2,
+        "id": 5,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 7,
+                "price": 699.99,
+                "product_name": "Samsung TV"
+            },
+            {
+                "id": 8,
+                "price": 1599.98,
+                "product_name": "Desktop Computer"
+            },
+            {
+                "id": 10,
+                "price": 29.99,
+                "product_name": "DVD Player"
+            }
+        ]
+    },
+    {
+        "customer_id": 4,
+        "id": 6,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 7,
+                "price": 699.99,
+                "product_name": "Samsung TV"
+            },
+            {
+                "id": 9,
+                "price": 299.99,
+                "product_name": "Remote controlled car"
+            }
+        ]
+    },
+    {
+        "customer_id": 5,
+        "id": 7,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 3,
+                "price": 1299.99,
+                "product_name": "Apple Watch"
+            },
+            {
+                "id": 7,
+                "price": 699.99,
+                "product_name": "Samsung TV"
+            },
+            {
+                "id": 9,
+                "price": 299.99,
+                "product_name": "Remote controlled car"
+            }
+        ]
+    },
+    {
+        "customer_id": 2,
+        "id": 8,
+        "order_date": "2024-09-04",
+        "products": [
+            {
+                "id": 1,
+                "price": 399.99,
+                "product_name": "PS5"
+            },
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 5,
+                "price": 1199.99,
+                "product_name": "iPhone 15"
+            },
+            {
+                "id": 7,
+                "price": 699.99,
+                "product_name": "Samsung TV"
+            },
+            {
+                "id": 9,
+                "price": 299.99,
+                "product_name": "Remote controlled car"
+            }
+        ]
+    },
+    {
+        "customer_id": 3,
+        "id": 9,
+        "order_date": "2024-09-14",
+        "products": [
+            {
+                "id": 1,
+                "price": 399.99,
+                "product_name": "PS5"
+            },
+            {
+                "id": 4,
+                "price": 2499.99,
+                "product_name": "Google Goggles"
+            },
+            {
+                "id": 5,
+                "price": 1199.99,
+                "product_name": "iPhone 15"
+            },
+            {
+                "id": 8,
+                "price": 1599.98,
+                "product_name": "Desktop Computer"
+            }
+        ]
+    }
+]
               
   /orders/<int:order_id>:
     get:
@@ -313,11 +523,40 @@ paths:
             $ref: "#/definitions/GetOrdersResponse"
           examples:
             application/json:
-              order_id: 1
-              customer_id: 1
-              product_id: 1
+              {
+    "customer_id": 2,
+    "id": 8,
+    "order_date": "2024-09-04",
+    "products": [
+        {
+            "id": 1,
+            "price": 399.99,
+            "product_name": "PS5"
+        },
+        {
+            "id": 2,
+            "price": 299.99,
+            "product_name": "Xbox"
+        },
+        {
+            "id": 5,
+            "price": 1199.99,
+            "product_name": "iPhone 15"
+        },
+        {
+            "id": 7,
+            "price": 699.99,
+            "product_name": "Samsung TV"
+        },
+        {
+            "id": 9,
+            "price": 299.99,
+            "product_name": "Remote controlled car"
+        }
+    ]
+}
               
-  /orders/<int:customer_id>:
+  /orders/customer/<int:customer_id>:
     get:
       tags:
         - Order
@@ -332,29 +571,59 @@ paths:
             $ref: "#/definitions/GetOrdersResponse"
           examples:
             application/json:
-              order_id: 1
-              customer_id: 1
-              product_id: 1
+              [
+    {
+        "customer_id": 5,
+        "id": 4,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 1,
+                "price": 399.99,
+                "product_name": "PS5"
+            },
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 4,
+                "price": 2499.99,
+                "product_name": "Google Goggles"
+            }
+        ]
+    },
+    {
+        "customer_id": 5,
+        "id": 7,
+        "order_date": "2024-09-03",
+        "products": [
+            {
+                "id": 2,
+                "price": 299.99,
+                "product_name": "Xbox"
+            },
+            {
+                "id": 3,
+                "price": 1299.99,
+                "product_name": "Apple Watch"
+            },
+            {
+                "id": 7,
+                "price": 699.99,
+                "product_name": "Samsung TV"
+            },
+            {
+                "id": 9,
+                "price": 299.99,
+                "product_name": "Remote controlled car"
+            }
+        ]
+    }
+]
               
-  /orders/customer-email:
-    get:
-      tags:
-        - Order
-      summary: "Retrieve a specific order by customer email address"
-      description: "Endpoint to retrieve a specific order, requires token authentication"
-      security:
-        - bearerAuth: []
-      responses:
-        200:
-          description: "Successfully retrieved order"
-          schema:
-            $ref: "#/definitions/GetOrdersResponse"
-          examples:
-            application/json:
-              order_id: 1
-              customer_id: 1
-              product_id: 1
-
+ 
 #Payloads and Responses
 definitions: 
 #Login Definitions
@@ -484,7 +753,7 @@ definitions:
         description: "Price of the product"
       product_name:
         type: "string"
-        example: "iPhone 14 Pro"
+        example: "iPhone 15"
     required:
       - price
       - product_name

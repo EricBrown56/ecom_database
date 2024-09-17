@@ -39,10 +39,3 @@ def find_by_customer_id(customer_id, token_id):
     else:
         return jsonify({"message": "Cannot view other customers orders."})
 
-def find_by_email():
-    email = request.json['email']
-    if email:
-        orders = orderService.find_by_email(email)
-        return orders_schema.jsonify(orders), 200
-    else:
-        return jsonify({"message":"Please insert an email"})

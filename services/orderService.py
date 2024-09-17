@@ -54,11 +54,7 @@ def find_by_customer_id(customer_id):
     
     return orders
 
-def find_by_email(email):
-    query = select(Orders).join(Customers).where(Customers.id==Orders.customer_id).where(Customers.email == email)
-    orders = db.session.execute(query).scalars().all()
 
-    return orders
 
 
 

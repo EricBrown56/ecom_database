@@ -13,17 +13,15 @@ def save(): #name the controller the same as the service it recruits
         return jsonify(e.messages), 400 #return error message with a 400 failed response
     
     new_product = productService.save(product_data)
-    return product_schema.jsonify(new_product), 201 # send the customer object with a success code
+    return jsonify({"status": "success", "message": "product added"}), 201 # send the customer object with a success code
 
 
 def find_all():
     page = request.args.get('page')
     per_page = request.args.get('per_page')
+    page = 1 if not page else page
+    per_page = 10 if not per_page else per_page
     all_products = productService.find_all(page, per_page)
 
     return products_schema.jsonify(all_products), 200
 
-def search_product():
-    search_term = request.args.get('search')
-    search_products = productService.search_product(search_term)
-    return products_schema.jsonify(search_products), 200
