@@ -41,9 +41,9 @@ paths:
             $ref: '#/definitions/LoginResponse'
           examples:
             application/json:
-              message: "message": "successfully logging in",
-              status: "status": "success",
-              token: "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              message: "successfully logging in"
+              status: "success"
+              token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               
 #GetAllCustomers Path
   /customers:
@@ -163,7 +163,7 @@ paths:
               status: "success"
 
   /customers/view-cart:
-    get:
+    post:
       tags:
         - Cart
       summary: "View all products in the customer's cart"
@@ -183,7 +183,7 @@ paths:
               ]
 
   /customers/empty-cart:
-    delete:
+    post:
       tags:
         - Cart
       summary: "Remove all products from the customer's cart"
@@ -807,12 +807,12 @@ definitions:
       customer_id:
         type: "integer"
         example: "1"
-      product_ids:
-        type: "object"
-        example: "[1, 2, 3]"
+      product_id:
+        type: "integer"
+        example: "1"
     required:
       - customer_id
-      - product_ids
+      - product_id
 
   AddToCartResponse:
     type: "object"
