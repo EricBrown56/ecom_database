@@ -828,11 +828,11 @@ definitions:
         type: "integer"
         example: "1"
       product_ids:
-        type: "object"
-        example: "[1, 2, 3]"
+        type: "integer"
+        example: "1"
     required:
       - customer_id
-      - product_ids
+      - product_id
 
 
   RemoveItemFromCartResponse:
